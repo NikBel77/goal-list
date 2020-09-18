@@ -1,32 +1,42 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Task from './Task';
-import Filter from './Filter';
+import arrowImg from '../assets/arrow.svg';
+import { ITask } from './Main'
 
-export interface ITask {
-    id: number,
-    date: string,
-    name: string,
-    uid: number
+interface ITableProps {
+    tasks: ITask[],
+    remove(task: ITask): void,
+    save(task: ITask): void
 }
 
-const initialGoals: ITask[] = [
-    { id: 1, date: new Date().toLocaleDateString() , name: 'first', uid: 1 },
-    { id: 2, date: new Date().toLocaleDateString() , name: 'seccond', uid: 2},
-    { id: 3, date: new Date().toLocaleDateString() , name: 'third', uid: 3}
-];
-
-export default function Table() {
-    let [tasks, setTasks] = useState(initialGoals);
+export default function Table(props: ITableProps) {
 
     return (
         <div className="task-table">
+            <table className="table table-borderless">
+                {!!props.tasks.length && (
+                    <thead>
+                        <tr>
+                            <th>Id <img src={arrowImg} alt="arrow" /></th>
+                            <th>Name <img src={arrowImg} alt="arrow" /></th>
+                            <th>Date <img src={arrowImg} alt="arrow" /></th>
+                            <th>no data</th>
+                        </tr>
+                    </thead>
+                )}
 
-            <Filter></Filter>
+                {!props.tasks.length && (
+                    <h5>no buisnes means no problem...</h5>
+                )}
+                <tbody>
+                    {props.tasks.map((task: ITask) => (
+                        <Task task={task} key={task.uid} remove={props.remove} save={props.save}></Task>
+                    ))}
+                </tbody>
 
-            {tasks.map((task: ITask) => (
-                <Task task={ task } key={ task.uid }></Task>
-            ))}
-            
+            </table>
+
+
         </div>
     )
 }

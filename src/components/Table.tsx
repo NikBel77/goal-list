@@ -36,8 +36,14 @@ export default function Table(props: ITableProps) {
         if(filter === filterName) {
             setDirection(!isReverce)
         } else {
+            setDirection(false)
             setFilter(filterName);
         }
+    }
+
+    let getArrowPos = (tag: filters): string => {
+        if(tag !== filter) return ''
+        return isReverce ? 'down' : 'up';
     }
 
     return (
@@ -49,19 +55,19 @@ export default function Table(props: ITableProps) {
                         <th>
                             <button className="btn btn-secondary btn-sm" onClick={() => changeFilter(filters.id)}>
                                 <span className="filter-label">#</span>
-                                <img src={arrowImg} alt="arrow" />
+                                <img src={arrowImg} alt="arrow" className={getArrowPos(filters.id)} />
                             </button>
                         </th>
                         <th>
                             <button className="btn btn-secondary btn-sm" onClick={() => changeFilter(filters.name)}>
                                 <span className="filter-label">name</span>
-                                <img src={arrowImg} alt="arrow" />
+                                <img src={arrowImg} alt="arrow" className={getArrowPos(filters.name)} />
                             </button>
                         </th>
                         <th colSpan={2}>
                             <button className="btn btn-secondary btn-sm" onClick={() => changeFilter(filters.date)}>
                                 <span className="filter-label">Date</span>
-                                <img src={arrowImg} alt="arrow" />
+                                <img src={arrowImg} alt="arrow" className={getArrowPos(filters.date)} />
                             </button>
                         </th>
                     </tr>

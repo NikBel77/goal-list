@@ -1,5 +1,6 @@
 import React, { createRef, useState } from 'react'
 import Table from './Table'
+import { initialTasks } from '../initialTasks'
 
 export interface ITask {
     id: number,
@@ -7,12 +8,6 @@ export interface ITask {
     name: string,
     uid: number
 }
-
-const initialTasks: ITask[] = [
-    { id: 1, date: new Date().toString(), name: 'first', uid: 1 },
-    { id: 2, date: new Date().toString(), name: 'seccond', uid: 2 },
-    { id: 3, date: new Date().toString(), name: 'third', uid: 3 }
-];
 
 export default function Main() {
     let [tasks, setTasks] = useState(initialTasks);
@@ -23,9 +18,12 @@ export default function Main() {
     const nameInp = createRef<HTMLInputElement>();
     const dateInp = createRef<HTMLInputElement>();
 
-    let editTask = (savedTask: ITask) => setTasks(
-        [...tasks.filter((task) => savedTask.uid !== task.uid), savedTask]
-    );
+    let editTask = (savedTask: ITask) => {
+        let removed = tasks.find((task) => task.uid === savedTask.uid);
+        if (!removed) return
+        tasks.splice(tasks.indexOf(removed), 1, savedTask);
+        setTasks([...tasks])
+    };
 
     let remove = (removedTask: ITask) => setTasks(
         [...tasks.filter((task) => removedTask !== task)]

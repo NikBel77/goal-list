@@ -41,11 +41,11 @@ function sortBy(tasks: ITask[], filter: filters, isReverseSort = false): ITask[]
         case filters.date: {
             if (isReverseSort) {
                 return tasks.sort((task1, task2) => {
-                    return new Date(task2.date).getTime() - new Date(task1.date).getTime();
+                    return new Date(task1.date).getTime() - new Date(task2.date).getTime();
                 });
             } else {
                 return tasks.sort((task1, task2) => {
-                    return new Date(task1.date).getTime() - new Date(task2.date).getTime();
+                    return new Date(task2.date).getTime() - new Date(task1.date).getTime();
                 });
             }
         }

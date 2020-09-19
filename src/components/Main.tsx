@@ -9,14 +9,15 @@ export interface ITask {
 }
 
 const initialTasks: ITask[] = [
-    { id: 1, date: new Date().toLocaleDateString(), name: 'first', uid: 1 },
-    { id: 2, date: new Date().toLocaleDateString(), name: 'seccond', uid: 2 },
-    { id: 3, date: new Date().toLocaleDateString(), name: 'third', uid: 3 }
+    { id: 1, date: new Date().toString(), name: 'first', uid: 1 },
+    { id: 2, date: new Date().toString(), name: 'seccond', uid: 2 },
+    { id: 3, date: new Date().toString(), name: 'third', uid: 3 }
 ];
 
 export default function Main() {
     let [tasks, setTasks] = useState(initialTasks);
     let [keyWord, setKeyWord] = useState('');
+    let hasContent = !!tasks.length;
 
     const idInp = createRef<HTMLInputElement>();
     const nameInp = createRef<HTMLInputElement>();
@@ -33,13 +34,13 @@ export default function Main() {
     let addNewTask = (): void => {
         if (!nameInp.current?.value) return;
         let date = dateInp.current?.value;
-        if(date) date = new Date(date).toLocaleDateString();
+        if (date) date = new Date(date).toString();
 
         let id: string | number = idInp.current?.value || tasks.length + 1;
         const newTask: ITask = {
             id: +id || tasks.length + 1,
             name: nameInp.current?.value || '',
-            date: date || new Date().toLocaleDateString(),
+            date: date || new Date().toString(),
             uid: Date.now()
         }
         setTasks([
@@ -47,7 +48,7 @@ export default function Main() {
         ]);
 
         if (idInp.current?.value) idInp.current.value = '';
-        if(dateInp.current?.value) dateInp.current.value = '';
+        if (dateInp.current?.value) dateInp.current.value = '';
         nameInp.current.value = '';
     }
     return (
@@ -59,7 +60,7 @@ export default function Main() {
 
                     <div className="create-form__fild">
                         <label htmlFor="id"><span>id</span></label>
-                        <input type="text" id="id" className="inp" ref={idInp} />
+                        <input type="number" id="id" className="inp" ref={idInp} />
                     </div>
                     <div className="create-form__fild">
                         <label htmlFor="name"><span>Name</span></label>
@@ -75,16 +76,27 @@ export default function Main() {
                 <button type="button" className="btn btn-success" onClick={addNewTask}>Add</button>
             </div>
 
-            <div className="main-table">
-                <div className="box">
-                    <input
-                        type="text"
-                        onChange={(e) => setKeyWord(e.currentTarget.value)}
-                        placeholder="wanna search" />
-                </div>
+            {hasContent && (
+                <div className="main-table">
+                    <div className="box search-panel">
+                        <input
+                            className="inp"
+                            type="text"
+                            onChange={(e) => setKeyWord(e.currentTarget.value)}
+                            placeholder="wanna search" />
+                    </div>
 
-                <Table tasks={tasks} remove={remove} edit={editTask} keyWord={keyWord}></Table>
-            </div>
+                    <Table tasks={tasks} remove={remove} edit={editTask} keyWord={keyWord}></Table>
+                </div>
+            )}
+
+            {!hasContent && (
+                <div className="box placeholder">
+                    <p>it looks like there is no business now</p>
+                    <p>just relax...</p>
+                </div>
+            )}
+
         </div>
     )
 }

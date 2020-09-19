@@ -29,27 +29,33 @@ export default function Task(props: ITaskProps) {
     }
 
     if (!editor) return (
-        <tr>
-            <td>{props.task.id}</td>
-            <td>{props.task.name}</td>
-            <td>{props.task.date}</td>
-            <td className="controll-row">
-                <button className="btn btn-dark btn-sm" onClick={() => toggleEditor(true)} >
+        <tr className="task">
+            <td>
+                <button className="btn btn-dark btn-sm btn-table" onClick={() => toggleEditor(true)} >
                     <img src={editIcon} alt="edit" />
                 </button>
-                <button className="btn btn-danger btn-sm" onClick={() => props.remove(props.task)} >
+            </td>
+            <td>{props.task.id}</td>
+            <td>{props.task.name}</td>
+            <td>{new Date(props.task.date).toLocaleDateString()}</td>
+            <td className="controll-row">
+                <button className="btn btn-danger btn-sm btn-table" onClick={() => props.remove(props.task)} >
                     <img src={removeIcon} alt="remove" />
                 </button>
             </td>
         </tr>
     )
     else return (
-        <tr>
+        <tr className="task">
+            <td>
+                <button className="btn btn-primary btn-sm btn-table" onClick={edit} >
+                    <img src={editIcon} alt="edit" />
+                </button>
+            </td>
             <td><input type="text" defaultValue={props.task.id} className="inp sm" ref={idInp} /></td>
             <td><input type="text" defaultValue={props.task.name} className="inp md" ref={nameInp} /></td>
-            <td><input type="text" defaultValue={props.task.date} className="inp md" ref={dateInp} /></td>
-            <td>
-                <button className="btn btn-primary btn-sm" onClick={edit} >Save</button>
+            <td colSpan={2}>
+                <input type="text" defaultValue={new Date(props.task.date).toDateString()} className="inp lg" ref={dateInp} />
             </td>
         </tr>
     )

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Task from './Task'
 import arrowImg from '../assets/arrow.svg'
 import { ITask } from './Main'
-import { sortBy, filterByStr } from '../utils'
+import { sortBy, filterByStr } from '../filters'
 
 interface ITableProps {
     tasks: ITask[],
@@ -52,24 +52,26 @@ export default function Table(props: ITableProps) {
 
                 <thead>
                     <tr>
-                        <th>
+                        <th className="row-sm"></th>
+                        <th className="row-sm">
                             <button className="btn btn-secondary btn-sm" onClick={() => changeFilter(filters.id)}>
                                 <span className="filter-label">#</span>
                                 <img src={arrowImg} alt="arrow" className={getArrowPos(filters.id)} />
                             </button>
                         </th>
-                        <th>
+                        <th className="row-md">
                             <button className="btn btn-secondary btn-sm" onClick={() => changeFilter(filters.name)}>
                                 <span className="filter-label">name</span>
                                 <img src={arrowImg} alt="arrow" className={getArrowPos(filters.name)} />
                             </button>
                         </th>
-                        <th colSpan={2}>
+                        <th className="row-md">
                             <button className="btn btn-secondary btn-sm" onClick={() => changeFilter(filters.date)}>
                                 <span className="filter-label">Date</span>
                                 <img src={arrowImg} alt="arrow" className={getArrowPos(filters.date)} />
                             </button>
                         </th>
+                        <th className="row-sm"></th>
                     </tr>
                 </thead>
 

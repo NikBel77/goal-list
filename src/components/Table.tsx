@@ -1,42 +1,79 @@
-import React from 'react';
-import Task from './Task';
-import arrowImg from '../assets/arrow.svg';
+import React, { useState } from 'react'
+import Task from './Task'
+import arrowImg from '../assets/arrow.svg'
 import { ITask } from './Main'
+import { sortBy, filterByStr } from '../utils'
 
 interface ITableProps {
     tasks: ITask[],
     remove(task: ITask): void,
-    save(task: ITask): void
+    edit(task: ITask): void,
+    keyWord: string
+}
+
+export enum filters {
+    id = 'id',
+    name = 'name',
+    date = 'date',
+    empty = 'empry'
 }
 
 export default function Table(props: ITableProps) {
+    const [filter, setFilter] = useState(filters.empty);
+    const [isReverce, setDirection] = useState(false);
+
+    let tasks: ITask[] = props.tasks;
+
+    if (props.keyWord) {
+        tasks = filterByStr(tasks, props.keyWord)
+    }
+
+    if (filter !== filters.empty) {
+        tasks = sortBy(tasks, filter, isReverce);
+    }
+
+    let changeFilter = (filterName: filters): void => {
+        if(filter === filterName) {
+            setDirection(!isReverce)
+        } else {
+            setFilter(filterName);
+        }
+    }
 
     return (
-        <div className="task-table">
+        <div className="box">
             <table className="table table-borderless">
-                {!!props.tasks.length && (
-                    <thead>
-                        <tr>
-                            <th>Id <img src={arrowImg} alt="arrow" /></th>
-                            <th>Name <img src={arrowImg} alt="arrow" /></th>
-                            <th>Date <img src={arrowImg} alt="arrow" /></th>
-                            <th>no data</th>
-                        </tr>
-                    </thead>
-                )}
 
-                {!props.tasks.length && (
-                    <h5>no buisnes means no problem...</h5>
-                )}
+                <thead>
+                    <tr>
+                        <th>
+                            <button className="btn btn-secondary btn-sm" onClick={() => changeFilter(filters.id)}>
+                                <span className="filter-label">#</span>
+                                <img src={arrowImg} alt="arrow" />
+                            </button>
+                        </th>
+                        <th>
+                            <button className="btn btn-secondary btn-sm" onClick={() => changeFilter(filters.name)}>
+                                <span className="filter-label">name</span>
+                                <img src={arrowImg} alt="arrow" />
+                            </button>
+                        </th>
+                        <th colSpan={2}>
+                            <button className="btn btn-secondary btn-sm" onClick={() => changeFilter(filters.date)}>
+                                <span className="filter-label">Date</span>
+                                <img src={arrowImg} alt="arrow" />
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+
                 <tbody>
-                    {props.tasks.map((task: ITask) => (
-                        <Task task={task} key={task.uid} remove={props.remove} save={props.save}></Task>
+                    {tasks.map((task: ITask) => (
+                        <Task task={task} key={task.uid} remove={props.remove} edit={props.edit}></Task>
                     ))}
                 </tbody>
 
             </table>
-
-
         </div>
     )
 }

@@ -6,7 +6,7 @@ import editIcon from '../assets/edit.svg'
 interface ITaskProps {
     task: ITask,
     remove(task: ITask): void;
-    save(task: ITask): void
+    edit(task: ITask): void
 }
 
 export default function Task(props: ITaskProps) {
@@ -21,10 +21,10 @@ export default function Task(props: ITaskProps) {
         const newTask: ITask = {
             id: +id || props.task.id,
             name: nameInp.current?.value || '',
-            date: dateInp.current?.value || '',
+            date: dateInp.current?.value || new Date().toLocaleDateString(),
             uid: props.task.uid
         }
-        props.save(newTask);
+        props.edit(newTask);
         toggleEditor(false)
     }
 
@@ -33,21 +33,23 @@ export default function Task(props: ITaskProps) {
             <td>{props.task.id}</td>
             <td>{props.task.name}</td>
             <td>{props.task.date}</td>
-            <td>
-                <img src={editIcon} alt="edit" onClick={() => toggleEditor(true)} />
-            </td>
-            <td>
-                <img src={removeIcon} alt="remove" onClick={() => props.remove(props.task)} />
+            <td className="controll-row">
+                <button className="btn btn-dark btn-sm" onClick={() => toggleEditor(true)} >
+                    <img src={editIcon} alt="edit" />
+                </button>
+                <button className="btn btn-danger btn-sm" onClick={() => props.remove(props.task)} >
+                    <img src={removeIcon} alt="remove" />
+                </button>
             </td>
         </tr>
     )
     else return (
         <tr>
-            <td><input type="text" defaultValue={props.task.id} className="edit-inp" ref={idInp} /></td>
-            <td><input type="text" defaultValue={props.task.name} className="edit-inp" ref={nameInp} /></td>
-            <td><input type="text" defaultValue={props.task.date} className="edit-inp" ref={dateInp} /></td>
+            <td><input type="text" defaultValue={props.task.id} className="inp sm" ref={idInp} /></td>
+            <td><input type="text" defaultValue={props.task.name} className="inp md" ref={nameInp} /></td>
+            <td><input type="text" defaultValue={props.task.date} className="inp md" ref={dateInp} /></td>
             <td>
-                <button onClick={edit} >Save</button>
+                <button className="btn btn-primary btn-sm" onClick={edit} >Save</button>
             </td>
         </tr>
     )
